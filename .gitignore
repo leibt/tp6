@@ -1,0 +1,5 @@
+.project
+.classpath
+src/config/dao.properties
+.settings
+build
