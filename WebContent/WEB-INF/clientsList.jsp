@@ -37,7 +37,7 @@
 			  		<td> <c:out value="${ cl.email }" /></td>
 			  		<td>
 			  			<c:if test="${not empty cl.image }">
-			  				<a target="_blank" href="<c:url value="/images/${c.image }" />">OPEN</a>
+			  				<a target="_blank" href="<c:url value="/images/${cl.image }" />">OPEN</a>
 			  			</c:if>
 			  		</td>
 			  		<td class="action"><a href="<c:url value='/delete-client' ><c:param name='idClient' value='${cl.id }' /></c:url>"><strong>X</strong></a></td>
