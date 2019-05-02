@@ -10,11 +10,10 @@
 <body>
 
 	<c:import url="/inc/menu.jsp"/>
-	
-	
+
 	<c:choose>
 		<c:when test="${empty clientsList }">
-			<p class="erreur">No client save</p>
+			<p class="erreur">No clients save</p>
 		</c:when>
 		<c:otherwise>
 			<table>
@@ -29,21 +28,21 @@
 			  </tr>
 			  
 			  <c:forEach var="client" items="${sessionScope.clientsList }" varStatus="flag">	
+			  <c:set var="cl" value="${client.value }" scope="request"></c:set>
 			  	<tr>
-			  		<td><c:out value="${ client.value.nom }" /></td>
-			  		<td><c:out value="${ client.value.prenom }" /></td>
-			  		<td><c:out value="${ client.value.adresse }" /></td>
-			  		<td><c:out value="${ client.value.telephone }" /></td>
-			  		<td> <c:out value="${ client.value.email }" /></td>
+			  		<td><c:out value="${ cl.name }" /></td>
+			  		<td><c:out value="${ cl.firstname }" /></td>
+			  		<td><c:out value="${ cl.address }" /></td>
+			  		<td><c:out value="${ cl.phone }" /></td>
+			  		<td> <c:out value="${ cl.email }" /></td>
 			  		<td>
-			  			<c:if test="${not empty client.value.image }">
-			  				<a target="_blank" href="<c:url value="/images/${client.value.image }" />">VOIR</a>
+			  			<c:if test="${not empty cl.image }">
+			  				<a target="_blank" href="<c:url value="/images/${c.image }" />">OPEN</a>
 			  			</c:if>
 			  		</td>
-			  		<td class="action"><a href="<c:url value='/delete-client' ><c:param name='idClient' value='${client.value.id }' /></c:url>"><strong>X</strong></a></td>
+			  		<td class="action"><a href="<c:url value='/delete-client' ><c:param name='idClient' value='${cl.id }' /></c:url>"><strong>X</strong></a></td>
 			  	</tr>
 			  </c:forEach>
-			  
 			</table>
 		</c:otherwise>
 	</c:choose>

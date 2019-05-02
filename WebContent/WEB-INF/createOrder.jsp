@@ -9,27 +9,25 @@
     <body>
         <div>
         	<c:import url="/inc/menu.jsp"/>
-            <form method="post" action="<c:url value="/creationCommande" />">
+            <form method="post" action="<c:url value="/create-order" />" enctype="multipart/form-data">
             	<c:set value="${order.client }" var="client" scope="request" />
-            	
-            	
+            	           	
             	<fieldset>
 					<legend>Order information</legend>
 					
-					<c:if test="${!empty clientList}">
+					<c:if test="${!empty clientsList}">
 						<div class="q_new_cli">
 							<label for="newClient">New client ? <span class="requis">*</span></label>  
 							<input type="radio" class="choiceNewClient" name="choiceNewClient" value="newClient" checked /> Yes <input type="radio" class="choiceNewClient" name="choiceNewClient" value="oldClient" /> No
 							<br/><br/>  
 							  
 							  <div class="oldClient">
-							  	<select id="existingClient" name="existingClient">
+							  	<select id="existingClientId" name="existingClientId">
 							  		<option value="">Choose a client... </option>
 							  		
 							  		<c:forEach var="cli" items="${sessionScope.clientsList }">
-							  			<option value="<c:out value='${cli.value.name }' />">${cli.value.name } ${cli.value.firstname} </option>
+							  			<option value="<c:out value='${cli.value.id }' />">${cli.value.name } ${cli.value.firstname} </option>
 							  		</c:forEach>
-							  	
 								</select>
 							  </div>
 						</div>

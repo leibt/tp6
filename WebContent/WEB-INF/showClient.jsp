@@ -9,7 +9,7 @@
     <body>
     	<%@ include file="/inc/menu.jsp" %>
   		
-		<p class="info"><c:out value="${ form.msg }" /></p>	
+		<p class="info">Info : <c:out value="${ form.msg }" /></p>	
 		
   		<c:if test="${not error }">
 		    <p>Name : <c:out value="${ client.name }" /></p>

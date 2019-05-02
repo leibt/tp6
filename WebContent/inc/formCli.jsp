@@ -1,6 +1,6 @@
 	  <div class="newClient">
 	  	<label for="nameClient">Name <span class="requis">*</span></label>
-		<input type="text" id="nameClient" name="nomClient" value="<c:out value='${client.name }' />" size="20" maxlength="20" />
+		<input type="text" id="nameClient" name="nameClient" value="<c:out value='${client.name }' />" size="20" maxlength="20" />
 		<span class="erreur" >${form.errors['nameClient'] }</span>
 		 <br />
 		                    
@@ -24,7 +24,7 @@
 		<span class="erreur" >${form.errors['emailClient'] }</span>
 		<br /> 
 		
-		<label for="imageClient">Image <span class="requis">*</span></label>
+		<label for="imageClient">Image</label>
 		<input type="file" id="imageClient" name="imageClient" value="<c:out value='${client.image }' />" size="20" maxlength="60" />
 		<span class="erreur" >${form.errors['imageClient'] }</span>
 		<br />   

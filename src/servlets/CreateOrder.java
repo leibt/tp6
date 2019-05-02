@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +23,8 @@ import forms.OrderForm;
 /**
  * Servlet implementation class CreateOrder
  */
-@WebServlet("/create-order")
+@WebServlet(urlPatterns="/create-order", initParams = @WebInitParam(name="path", value="/Users/leibenlo/Documents/"))
+@MultipartConfig( location = "C:/Users/leibenlo/Documents", maxFileSize = 1048576, maxRequestSize = 5242880, fileSizeThreshold = 1048576 )
 public class CreateOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -61,9 +64,9 @@ public class CreateOrder extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String path = this.getServletContext().getInitParameter("path");
+		String path = this.getServletConfig().getInitParameter("path");		
 		OrderForm form = new OrderForm(clientDAO, orderDAO);
-		Order order = form.creaCom(request,path);
+		Order order = form.createOrder(request,path);
 		HttpSession session = request.getSession();
 		
 		String choiceNewClient = (String) request.getAttribute("choiceNewClient");

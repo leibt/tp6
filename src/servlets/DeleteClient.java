@@ -21,8 +21,8 @@ import exceptions.DAOException;
 @WebServlet("/delete-client")
 public class DeleteClient extends HttpServlet {
 	
-	public static final String ATT_LIST_CLI		= "clients-list";
-	public static final String VIEW_LIST_CLI	= "/WEB-INF/showClient";
+	public static final String ATT_LIST_CLI		= "clientsList";
+	public static final String VIEW_LIST_CLI	= "/clients-list";
 	public static final String ATT_DAO_FACTORY	= "daoFactory";
    
 	private ClientDAO clientDAO;
@@ -41,11 +41,14 @@ public class DeleteClient extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		Map<Long,Client> cliList = (Map<Long, Client>) session.getAttribute(ATT_LIST_CLI);
+		
 		if(cliList != null) {
 			try {
-				clientDAO.delete(cliList.get(id)); 
+				clientDAO.delete(cliList.get(id));
+				
 				cliList.remove(id);
 			}catch(DAOException e) {
+				System.out.println("ERROR LEI : " +e);
 				e.printStackTrace();
 			}
 			

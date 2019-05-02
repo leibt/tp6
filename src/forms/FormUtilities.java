@@ -41,7 +41,7 @@ public class FormUtilities {
 			byte[] buffer = new byte[buffer_size];
 			int size = 0;
 			while( ( size = in.read(buffer) ) > 0) {
-				System.out.println("ECRITURE : "+buffer);
+				//System.out.println("ECRITURE : "+buffer);
 				out.write(buffer,0,size);
 			}
 		}finally {

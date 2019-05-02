@@ -41,26 +41,23 @@ public class ClientForm {
 		this.clientDAO = clientDAO;
 	}
 	
-	public Client creaCli(HttpServletRequest request, String path) {
+	public Client createClient(HttpServletRequest request, String path) {
 		
 		String name = getFieldValue(request,NAME_FIELD);
         String firstname = getFieldValue(request,FIRSTNAME_FIELD);
         String address = getFieldValue(request,ADDRESS_FIELD);
         String phone = getFieldValue(request,PHONE_FIELD);
         String email = getFieldValue(request,EMAIL_FIELD);
-        
-        
+                
 		Client cli = new Client();
-		
+
+    	checkName(name, cli);
+		checkFirstname(firstname, cli);
+		checkAddress(address,cli);
+		checkPhone(phone,cli);
+		checkEmail(email,cli);
+		checkImage(request, path, cli);
         try {
-        	checkName(name, cli);
-    		checkFirstname(firstname, cli);
-    		checkAddress(address,cli);
-    		checkPhone(phone,cli);
-    		checkEmail(email,cli);
-    		checkImage(request, path, cli);
-    		
-    		
         	if(errors.isEmpty()) {
         		clientDAO.create(cli);
     			msg="Successful of customer creation";
@@ -68,7 +65,8 @@ public class ClientForm {
             	msg="Failure of customer creation ";
             }
         }catch(DAOException e) {
-        	
+        	setError("msg", "ERROOOOOOOR !");
+        	//e.printStackTrace();
         }
 		return cli;
 	}
@@ -150,7 +148,6 @@ public class ClientForm {
 	private void checkImage(HttpServletRequest request, String path, Client cli){		
 		String imageName = null;
 		InputStream content = null;
-		
 		try {
 			Part part = request.getPart(IMAGE_FIELD);
 			
@@ -158,21 +155,22 @@ public class ClientForm {
 			if(imageName != null && !imageName.isEmpty()) {
 				imageName = imageName.substring(imageName.lastIndexOf("/") + 1).substring(imageName.lastIndexOf("\\")+1);			
 				content = part.getInputStream();
-			}
-			
-			MimeUtil.registerMimeDetector( "eu.medsea.mimeutil.detector.MagicMimeMimeDetector" );
-			Collection<?> mimeTypes = MimeUtil.getMimeTypes(content);
-			
-			if( mimeTypes.toString().startsWith("image") ) {
-				try {
-					writeFile( content, imageName, path, BUFFER_SIZE );
-				}catch(Exception e) {
-					e.printStackTrace();
-					setError(IMAGE_FIELD,"Error writing ");
+				
+				MimeUtil.registerMimeDetector( "eu.medsea.mimeutil.detector.MagicMimeMimeDetector" );
+				Collection<?> mimeTypes = MimeUtil.getMimeTypes(content);
+				
+				if( mimeTypes.toString().startsWith("image") ) {
+					try {
+						writeFile( content, imageName, path, BUFFER_SIZE );
+					}catch(Exception e) {
+						e.printStackTrace();
+						setError(IMAGE_FIELD,"Error writing ");
+					}
+				}else {
+					throw new FormValidationException("This file must be an image");
 				}
-			}else {
-				throw new FormValidationException("This file must be an image");
 			}
+			
 		
 		}catch(IllegalStateException e) {
 			e.printStackTrace();

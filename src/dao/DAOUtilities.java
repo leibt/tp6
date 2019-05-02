@@ -52,7 +52,7 @@ public class DAOUtilities {
 		}
 	}
 	
-	public static void closures(ResultSet rs, Statement statement, Connection cnx) {
+	public static void closures(Connection cnx, Statement statement, ResultSet rs) {
 		closure(rs);
 		closure(statement);
 		closure(cnx);

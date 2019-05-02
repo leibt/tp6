@@ -28,7 +28,7 @@ public class ClientDAOImpl implements ClientDAO{
 		PreparedStatement ps = null;
 		ResultSet result = null;
 		
-		String query = "INSERT INTO Client (name,firstname,address,phone,email,image) VALUES (?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Clients (name,firstname,address,phone,email,image) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try {
 			cnx = daoFactory.getConnection();
@@ -49,7 +49,7 @@ public class ClientDAOImpl implements ClientDAO{
 		}catch(SQLException e) {
 			throw new DAOException(e);
 		}finally {
-			closures(result,ps,cnx);
+			closures(cnx,ps,result);
 		}
 	}
 	
@@ -59,11 +59,11 @@ public class ClientDAOImpl implements ClientDAO{
 		Connection cnx = null;
 		PreparedStatement ps = null;
 		
-		String query = "DELETE FROM Client WHERE id = ?";
+		String query = "DELETE FROM Clients WHERE id = ?";
 		
 		try {
 			cnx = daoFactory.getConnection();
-			ps = initPrepQuery(cnx,query,true,client.getId());
+			ps = initPrepQuery(cnx,query,false,client.getId());
 			
 			int statut = ps.executeUpdate();
 			if(statut == 0) {
@@ -90,7 +90,7 @@ public class ClientDAOImpl implements ClientDAO{
 		Client client = null;
 		List<Client> clientList = new ArrayList<>();
 		
-		String query = "SELECT id,name,firstname,address,phone,email,image FROM Client";
+		String query = "SELECT id,name,firstname,address,phone,email,image FROM Clients";
 		
 		try {
 			cnx = daoFactory.getConnection();
@@ -103,7 +103,10 @@ public class ClientDAOImpl implements ClientDAO{
 				clientList.add(client);
 			}
 		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new DAOException(e);
+		}finally {
+			closures(cnx, ps, result);
 		}
 		
 		return clientList;
@@ -117,7 +120,7 @@ public class ClientDAOImpl implements ClientDAO{
 		ResultSet result = null;
 		Client client = null;
 		
-		String query = "SELECT id,name,firstname,address,phone,email,image FROM Client WHERE id = ?";
+		String query = "SELECT id,name,firstname,address,phone,email,image FROM Clients WHERE id = ?";
 		
 		try {
 			cnx = daoFactory.getConnection();
@@ -129,9 +132,10 @@ public class ClientDAOImpl implements ClientDAO{
 				client = getPropertiesClient(result);
 			}
 		}catch(SQLException e) {
+			e.printStackTrace();
 			throw new DAOException(e);
 		}finally {
-			closures(result,ps,cnx);
+			closures(cnx,ps,result);
 		}
 
 		return client;

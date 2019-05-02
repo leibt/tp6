@@ -22,7 +22,7 @@ import exceptions.DAOException;
 public class DeleteOrder extends HttpServlet {
 	
 
-	private static final String VIEW_LIST_ORDER = "/WEB-INF/showOrder.jsp";
+	private static final String VIEW_LIST_ORDER = "/orders-list";
 	private static final String ATT_LIST_COM 	= "ordersList";
 	
 	public static final String ATT_DAO_FACTORY	= "daoFactory";
@@ -38,7 +38,6 @@ public class DeleteOrder extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//String dateCom = request.getParameter("dateCom");
 		String idOrder = request.getParameter("id");
 		Long id = Long.parseLong(idOrder);
 		

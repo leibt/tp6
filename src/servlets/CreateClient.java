@@ -55,7 +55,7 @@ public class CreateClient extends HttpServlet {
 		
 		String path = this.getServletConfig().getInitParameter(ATT_PATH);
 		ClientForm fc = new ClientForm(clientDAO);
-		Client client = fc.creaCli(request,path);
+		Client client = fc.createClient(request,path);
 		
 		HttpSession session = request.getSession();
 				

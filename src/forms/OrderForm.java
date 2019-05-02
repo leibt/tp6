@@ -25,7 +25,7 @@ public class OrderForm {
     public static final String DELIVERY_METHOD_FIELD	= "deliveryMethodOrder";
     public static final String DELIVERY_STATUS_FIELD 	= "deliveryStatusOrder";
     public static final String CLIENT_CHOICE_FIELD	  	= "choiceNewClient";
-    public static final String CLIENT_NAME_EXI_FIELD	= "existingClient";
+    public static final String CLIENT_ID_EXI_FIELD		= "existingClientId";
     
     public static final String FORMAT_DATE            	= "dd/MM/yyyy HH:mm:ss";
     public static final String ATT_LIST_CLI			  	= "clientsList";
@@ -40,49 +40,41 @@ public class OrderForm {
 		this.clientDAO = clientDAO;
 		this.orderDAO = orderDAO;
 	}
-	
-	public OrderForm(OrderDAO orderDAO) {
-		this.orderDAO = orderDAO;
-	}
     
-    public Order creaCom (HttpServletRequest request, String path) {
+    public Order createOrder (HttpServletRequest request, String path) {
     	
     	String paymentMethod 	= getFieldValue(request, PAYMENT_METHOD_FIELD );
         String paymentStatus 	= getFieldValue(request, PAYMENT_STATUS_FIELD );
         String deliveryMethod 	= getFieldValue(request, DELIVERY_METHOD_FIELD );
-        String deliveryStatus 	= getFieldValue(request, DELIVERY_STATUS_FIELD );
-        
+        String deliveryStatus 	= getFieldValue(request, DELIVERY_STATUS_FIELD );   
         String total		 	= getFieldValue(request, TOTAL_FIELD );
     	
         String isnewClient 		= getFieldValue(request, CLIENT_CHOICE_FIELD);
         String label_newClient 	= "newClient";
        
         Client cli;
+        Order order = new Order();
         
         if( "oldClient".equals(isnewClient) ) {
-			String clientName = getFieldValue(request, CLIENT_NAME_EXI_FIELD);
+        	
+			String idClient_temp = getFieldValue(request, CLIENT_ID_EXI_FIELD);
+        	Long idClient = Long.parseLong(idClient_temp);
         	
     		HttpSession session = request.getSession();
 			Map<Long,Client> cliList = (HashMap<Long,Client>)session.getAttribute(ATT_LIST_CLI);
-			
-			cli = cliList.get(clientName);
+						
+			cli = (Client) cliList.get(idClient);
+
 			errors = new HashMap<>();
     	}else {
     		ClientForm fc = new ClientForm(clientDAO);
-    	    cli = fc.creaCli(request,path);
+    	    cli = fc.createClient(request,path);
     	    errors=fc.getErrors();
     	}
-        
-        Order order = new Order();
         order.setClient(cli);
-    	
     	
         DateTime date = new DateTime();
         order.setDate(date);
-        //org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern( FORMAT_DATE );
-        //String date = dt.toString( formatter );
-        
-        
         
         checkTotal(total,order);
         checkMethod(PAYMENT_METHOD_FIELD, paymentMethod, order);
@@ -91,9 +83,10 @@ public class OrderForm {
         checkStatus(DELIVERY_STATUS_FIELD, deliveryStatus, order);      
         
         if(errors.isEmpty()) {
-        	msg="Succès de la création de la commande";
+        	orderDAO.create(order);
+        	msg="Successful of order creation";
         }else {
-        	msg="Echec de la création de la commande";
+        	msg="Failure of order creation";
         }
     	
     	return order;
